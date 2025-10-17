@@ -12,6 +12,7 @@ class Player
         (
           id INTEGER PRIMARY KEY,
           Name TEXT,
+          Class TEXT,
           Level INTEGER,
           Percent FLOAT,
           Guild TEXT,
@@ -30,10 +31,10 @@ class Player
     return false unless valid?(player:)
 
     sql = <<~SQL
-      INSERT INTO players (Name, Level, Percent, Guild, Deleted)
-      VALUES (?, ?, ?, ?, ?)
+      INSERT INTO players (Name, Class, Level, Percent, Guild, Deleted)
+      VALUES (?, ?, ?, ?, ?, ?)
     SQL
-    @db.execute(sql, [player["mName"], player["mLevel"], player["mPercent"], player["mGuildName"], 0])
+    @db.execute(sql, [player["mName"], player["mClass"], player["mLevel"], player["mPercent"], player["mGuildName"], 0])
   end
 
   def valid?(player:)
