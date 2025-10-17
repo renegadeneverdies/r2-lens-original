@@ -1,4 +1,5 @@
 require_relative 'scraper'
+require_relative '../models/player'
 require 'sqlite3'
 
 class Tracker
@@ -45,3 +46,6 @@ class Tracker
     end
   end
 end
+
+scraper = Scraper.new
+tracker = Tracker.new(characters: scraper.fetch_characters, guilds: scraper.fetch_guilds)

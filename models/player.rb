@@ -16,16 +16,29 @@ class Player
           Percent FLOAT,
           Guild TEXT,
           Deleted BOOLEAN,
-          created_at DATETIME CURRENT_TIMESTAMP
+          created_at TEXT DEFAULT CURRENT_TIMESTAMP
         )
     SQL
     @db.execute(sql)
   end
 
   def self.finalize(db)
-    puts "a"
     db.close
   end
-end
 
-binding.pry
+  def create(player:)
+    sql = <<~SQL
+      INSERT INTO players (Name, Level, Percent, Guild, Deleted)
+      VALUES (?, ?, ?, ?, ?)
+    SQL
+    @db.execute(sql, [player["mName"], player["mLevel"], player["mPercent"], player["mGuildName"], 0])
+  end
+
+  def destroy(player:)
+
+  end
+
+  def valid?(player:)
+    player.slice("mName", "mClass", "mGuildName", "mLevel", "mPercent").values.none?(nil)
+  end
+end
