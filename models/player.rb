@@ -27,15 +27,13 @@ class Player
   end
 
   def create(player:)
+    return false unless valid?(player:)
+
     sql = <<~SQL
       INSERT INTO players (Name, Level, Percent, Guild, Deleted)
       VALUES (?, ?, ?, ?, ?)
     SQL
     @db.execute(sql, [player["mName"], player["mLevel"], player["mPercent"], player["mGuildName"], 0])
-  end
-
-  def destroy(player:)
-
   end
 
   def valid?(player:)
