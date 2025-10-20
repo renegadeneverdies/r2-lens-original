@@ -27,6 +27,6 @@ class Scraper
   private
 
   def fetch_top_list
-    JSON.parse(@json_top_list[12..@json_top_list.size - 4])
+    @fetch_top_list ||= JSON.parse(@json_top_list[12..@json_top_list.size - 4])
   end
 end

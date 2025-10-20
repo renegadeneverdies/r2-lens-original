@@ -12,6 +12,7 @@ class Tracker
   }
   LEVEL_COEF = 153
   SCORE_COEF = 50000
+  @@db = SQLite3::Database.new("db/r2lens.sqlite")
 
   attr_accessor :characters
 
@@ -24,7 +25,7 @@ class Tracker
     xp_for_level = xp_requirements
 
     @characters.transform_values do |job|
-      job[..10].each do |player|
+      job.each do |player|
         guild_id = player["mGuildNo"].to_s
         player["mGuildName"] = @guilds.dig(guild_id, "mGuildName")
         player["mClass"] = JOB_MAPPING[player["mClass"].to_s] if JOB_MAPPING.keys.include?(player["mClass"].to_s)
@@ -37,15 +38,18 @@ class Tracker
   private
 
   def xp_requirements
-    db = SQLite3::Database.new("db/r2lens.sqlite")
-    exp_table = db.execute("SELECT ELevel, EExp FROM levels")
-    db.close
+    exp_table = @@db.execute("SELECT ELevel, EExp FROM levels")
 
     exp_table.each_with_object({}) do |pair, memo|
       memo[pair.first] = pair.last
     end
   end
+
+  def calculate_difference(player)
+    
+  end
 end
 
 scraper = Scraper.new
 tracker = Tracker.new(characters: scraper.fetch_characters, guilds: scraper.fetch_guilds)
+binding.pry
