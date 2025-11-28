@@ -1,7 +1,9 @@
-require 'nokogiri'
-require 'httparty'
-require 'pry'
-require 'json'
+# frozen_string_literal: true
+
+require "nokogiri"
+require "httparty"
+require "pry"
+require "json"
 
 class Scraper
   attr_accessor :resource
@@ -12,14 +14,14 @@ class Scraper
     @json_top_list = document.css("script").each do |element|
       contents = element.children.first.to_s
 
-      break contents.split(' = ').last.strip if contents[..50].include?('JSON.parse')
+      break contents.split(" = ").last.strip if contents[..50].include?("JSON.parse")
     end
   end
-  
+
   def fetch_guilds
     fetch_top_list["_mGuildList"]
   end
-  
+
   def fetch_characters
     fetch_top_list["_mList"]
   end

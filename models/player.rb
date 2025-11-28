@@ -1,5 +1,6 @@
+# frozen_string_literal: true
+
 require "sqlite3"
-require "pry"
 
 class Player
   include Comparable
@@ -19,7 +20,7 @@ class Player
   def <=>(other)
     return nil unless other.is_a?(Player)
 
-    (self.level <=> other.level) == 0 ? (self.percent <=> other.percent) : (self.level <=> other.level)
+    (level <=> other.level).zero? ? (percent <=> other.percent) : (level <=> other.level)
   end
 
   def self.create_table
@@ -50,6 +51,6 @@ class Player
   end
 
   def self.valid?(attributes)
-    player.slice("mName", "mClass", "mGuildName", "mLevel", "mPercent").values.none?(nil)
+    attributes.slice("mName", "mClass", "mGuildName", "mLevel", "mPercent").values.none?(nil)
   end
 end

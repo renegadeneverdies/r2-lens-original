@@ -1,6 +1,8 @@
-require_relative 'scraper'
-require_relative '../models/player'
-require 'sqlite3'
+# frozen_string_literal: true
+
+require_relative "scraper"
+require_relative "../models/player"
+require "sqlite3"
 
 class Tracker
   JOB_MAPPING = {
@@ -8,29 +10,32 @@ class Tracker
     "1" => "ranger",
     "2" => "mage",
     "3" => "assassin",
-    "4" => "summoner"
-  }
+    "4" => "summoner",
+    "knight" => "knight",
+    "ranger" => "ranger",
+    "mage" => "mage",
+    "assassin" => "assassin",
+    "summoner" => "summoner"
+  }.freeze
   LEVEL_COEF = 153
-  SCORE_COEF = 50000
+  SCORE_COEF = 50_000
+
   @@db = SQLite3::Database.new("db/r2lens.sqlite")
 
   attr_accessor :characters
 
   def initialize(characters:, guilds:)
-    @characters = characters.transform_keys { |key| key = JOB_MAPPING[key] }
+    @characters = characters.transform_keys { |key| JOB_MAPPING[key] }
     @guilds = guilds
   end
-  
-  def transform_score
-    xp_for_level = xp_requirements
 
+  def transform_score
     @characters.transform_values do |job|
       job.each do |player|
-        guild_id = player["mGuildNo"].to_s
-        player["mGuildName"] = @guilds.dig(guild_id, "mGuildName")
-        player["mClass"] = JOB_MAPPING[player["mClass"].to_s] if JOB_MAPPING.keys.include?(player["mClass"].to_s)
+        player["mGuildName"] = @guilds.dig(player["mGuildNo"].to_s, "mGuildName")
+        player["mClass"] = JOB_MAPPING[player["mClass"].to_s]
         player["mLevel"] = player["mPoint"] / LEVEL_COEF
-        player["mPercent"] = (player["mScore"].to_f / (xp_for_level[player["mLevel"]] / SCORE_COEF) * 100).round(3)
+        player["mPercent"] = score_to_percent(player["mScore"].to_f, player["mLevel"])
       end
     end
   end
@@ -45,11 +50,12 @@ class Tracker
     end
   end
 
-  def calculate_difference(player)
-    
+  def score_to_percent(score, level)
+    (score / (xp_requirements[level] / SCORE_COEF) * 100).round(3)
   end
 end
 
-scraper = Scraper.new
-tracker = Tracker.new(characters: scraper.fetch_characters, guilds: scraper.fetch_guilds)
-binding.pry
+# job = gets
+# scraper = Scraper.new
+# tracker = Tracker.new(characters: scraper.fetch_characters, guilds: scraper.fetch_guilds)
+# puts tracker.transform_score[job]
