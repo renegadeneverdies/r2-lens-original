@@ -1,0 +1,24 @@
+services:
+  app:
+    build: .  
+    container_name: r2-lens
+    depends_on:
+      - mongodb
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./db:/app/data/
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/r2_lens
+      - RACK_ENV=production
+    command: ["sleep", "infinity"]
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb-data:/data/db
+
+volumes:
+  mongodb-data:

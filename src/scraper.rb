@@ -2,7 +2,6 @@
 
 require "nokogiri"
 require "httparty"
-require "pry"
 require "json"
 
 class Scraper

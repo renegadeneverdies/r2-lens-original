@@ -1,56 +1,38 @@
 # frozen_string_literal: true
 
-require "sqlite3"
+require "mongoid"
 
 class Player
-  include Comparable
-  attr_reader :name, :job, :level, :percent, :guild_name
+  include Mongoid::Document
+  include Mongoid::Timestamps
 
-  @@db = SQLite3::Database.new("db/r2lens.sqlite")
+  field :name, type: String
+  field :job, type: String
+  field :guild, type: String
+  field :exp_records, type: Array, default: []
 
-  def initialize(attributes = {})
-    @name = attributes["mName"]
-    @job = attributes["mClass"]
-    @level = attributes["mLevel"]
-    @percent = attributes["mPercent"]
-    @guild_name = attributes["mGuildName"]
-    @deleted = 0
+  index({ name: 1 }, { unique: true, background: true })
+
+  validates :name, presence: true, uniqueness: true
+
+  def self.create_or_find_by_from_scraper(attrs)
+    data = attrs.slice("mLevel", "mPercent")
+
+    player = Player.find_by(name: attrs["mName"])
+    player = Player.create({ name: attrs["mName"], job: attrs["mClass"], guild: attrs["mGuildName"] }) if player.blank?
+
+    player.add_exp_record(data)
   end
 
-  def <=>(other)
-    return nil unless other.is_a?(Player)
+  def add_exp_record(data)
+    record = {
+      date: Date.today.to_s,
+      level: data["mLevel"],
+      percent: data["mPercent"]
+    }
 
-    (level <=> other.level).zero? ? (percent <=> other.percent) : (level <=> other.level)
-  end
-
-  def self.create_table
-    sql = <<~SQL
-      CREATE TABLE IF NOT EXISTS players
-        (
-          id INTEGER PRIMARY KEY,
-          Name TEXT,
-          Class TEXT,
-          Level INTEGER,
-          Percent FLOAT,
-          Guild TEXT,
-          Deleted BOOLEAN,
-          created_at TEXT DEFAULT CURRENT_TIMESTAMP
-        )
-    SQL
-    @db.execute(sql)
-  end
-
-  def self.create(attributes)
-    return false unless valid?(attributes)
-
-    sql = <<~SQL
-      INSERT INTO players (Name, Class, Level, Percent, Guild, Deleted)
-      VALUES (?, ?, ?, ?, ?, ?)
-    SQL
-    @db.execute(sql, [player["mName"], player["mClass"], player["mLevel"], player["mPercent"], player["mGuildName"], 0])
-  end
-
-  def self.valid?(attributes)
-    attributes.slice("mName", "mClass", "mGuildName", "mLevel", "mPercent").values.none?(nil)
+    records = exp_records.reject { |r| r[:date] = record[:date] }
+    records << record
+    update({ exp_records: records.first(7) })
   end
 end
