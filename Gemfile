@@ -7,6 +7,7 @@ gem "mongo"
 gem "mongoid"
 gem "nokogiri"
 gem "pry"
+gem "require_all"
 gem "rubocop", require: false
 gem "rubocop-rspec", require: false
 gem "sqlite3"

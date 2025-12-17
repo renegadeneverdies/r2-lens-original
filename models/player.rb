@@ -9,6 +9,7 @@ class Player
   field :name, type: String
   field :job, type: String
   field :guild, type: String
+  field :current_position, type: Integer
   field :exp_records, type: Array, default: []
 
   index({ name: 1 }, { unique: true, background: true })
@@ -19,7 +20,16 @@ class Player
     data = attrs.slice("mLevel", "mPercent")
 
     player = Player.find_by(name: attrs["mName"])
-    player = Player.create({ name: attrs["mName"], job: attrs["mClass"], guild: attrs["mGuildName"] }) if player.blank?
+    if player.blank?
+      player = Player.create(
+        {
+          name: attrs["mName"],
+          job: attrs["mClass"],
+          guild: attrs["mGuildName"],
+          current_position: attrs["current_position"]
+        }
+      )
+    end
 
     player.add_exp_record(data)
   end
@@ -34,5 +44,15 @@ class Player
     records = exp_records.reject { |r| r[:date] = record[:date] }
     records << record
     update({ exp_records: records.first(7) })
+  end
+
+  def serialize
+    {
+      "mName" => name,
+      "mClass" => job,
+      "mGuildName" => guild,
+      "mLevel" => exp_records.last["level"],
+      "mPercent" => exp_records.last["percent"]
+    }
   end
 end

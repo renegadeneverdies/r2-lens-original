@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Services
-  class PlayerMovementTrackerService
+  class PlayerMovementTracker
     class << self
       def call(ratings_then, ratings_now)
         ratings_then.each_with_object({}) do |(job, _), result|
