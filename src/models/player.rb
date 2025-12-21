@@ -36,14 +36,14 @@ class Player
 
   def add_exp_record(data)
     record = {
-      date: Date.today.to_s,
-      level: data["mLevel"],
-      percent: data["mPercent"]
+      "date" => Date.today.to_s,
+      "level" => data["mLevel"],
+      "percent" => data["mPercent"]
     }
 
-    records = exp_records.reject { |r| r[:date] = record[:date] }
+    records = exp_records.filter { |r| r["date"] != record["date"] }
     records << record
-    update({ exp_records: records.first(7) })
+    update(exp_records: records.first(7))
   end
 
   def serialize

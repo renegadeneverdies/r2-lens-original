@@ -8,7 +8,7 @@ module Services
 
       level = last_record["level"] - first_record["level"]
       percent_now = level * 100 + last_record["percent"]
-      percent = percent_now - first_record["percent"]
+      percent = (percent_now - first_record["percent"]).round(3)
       { level:, percent: }
     end
   end

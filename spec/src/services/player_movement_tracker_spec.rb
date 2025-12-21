@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative "../../../src/services/player_movement_tracker_service"
-require_relative "../../../models/player"
+require_relative "../../../src/services/player_movement_tracker"
+require_relative "../../../src/models/player"
 
 RSpec.describe Services::PlayerMovementTracker do
   subject { described_class.call(roster_then, roster_now) }

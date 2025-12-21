@@ -4,13 +4,12 @@ require "pry"
 require "require_all"
 
 require_all "src/services"
-require_relative "./src/tracker"
-require_relative "./src/scraper"
+require_all "src/fetching"
 
 Mongoid.load!("./config/mongoid.yml", :development)
 
-scraper = Scraper.new
-tracker = Tracker.new(characters: scraper.fetch_characters, guilds: scraper.fetch_guilds)
+scraper = Fetching::Scraper.new
+tracker = Fetching::Tracker.new(characters: scraper.fetch_characters, guilds: scraper.fetch_guilds)
 scores = tracker.transform_score
 previous_scores = Services::PreviousScoresLookup.call(scores)
 tracker.commit(scores)
