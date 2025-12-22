@@ -2,6 +2,8 @@ require:
   - rubocop-rspec
 AllCops:
   TargetRubyVersion: 3.4.7
+  Exclude:
+  - vendor/bundle/**/*
 Style/StringLiterals:
   EnforcedStyle: double_quotes
 Style/Documentation:
@@ -12,3 +14,5 @@ Metrics/MethodLength:
   Max: 30
 Metrics/AbcSize:
   Max: 25
+Layout/EndOfLine:
+  EnforcedStyle: lf

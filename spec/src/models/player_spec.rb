@@ -4,13 +4,13 @@ require_relative "../../../src/models/player"
 
 RSpec.describe Player do
   let!(:player) do
-    Player.create({
-                 name: "player1",
-                 job: "knight",
-                 guild: "void",
-                 current_position: 1,
-                 exp_records: [first_record, second_record]
-               })
+    described_class.create({
+                             name: "player1",
+                             job: "knight",
+                             guild: "void",
+                             current_position: 1,
+                             exp_records: [first_record, second_record]
+                           })
   end
   let(:first_record) do
     {
@@ -46,8 +46,7 @@ RSpec.describe Player do
 
     context "when adding new date" do
       it "appends a record" do
-        expect { add_exp_record }.to change { player.exp_records.size }
-        expect(player.exp_records.last).to eq(third_record)
+        expect { add_exp_record }.to(change { player.exp_records.size })
       end
     end
 
@@ -61,9 +60,13 @@ RSpec.describe Player do
       end
 
       it "overwrites the record" do
-        expect { add_exp_record }.not_to change { player.exp_records.size }
-        expect(player.exp_records.last).to eq(third_record)
+        expect { add_exp_record }.not_to(change { player.exp_records.size })
       end
+    end
+
+    it "sets data as the last record" do
+      add_exp_record
+      expect(player.exp_records.last).to eq(third_record)
     end
   end
 end

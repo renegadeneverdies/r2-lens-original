@@ -5,13 +5,14 @@ source "https://rubygems.org"
 gem "httparty"
 gem "mongo"
 gem "mongoid"
-gem "nokogiri"
+gem "nokogiri", "~> 1.18", ">= 1.18.10"
 gem "require_all"
-gem "sqlite"
+gem "sqlite3"
 
-group :development do
+group :development, :test do
   gem "pry"
   gem "rubocop", require: false
+  gem "rubocop-performance", require: false
   gem "rubocop-rspec", require: false
 end
 

@@ -11,8 +11,7 @@ Mongoid.load!("./config/mongoid.yml", :development)
 scraper = Fetching::Scraper.new
 tracker = Fetching::Tracker.new(characters: scraper.fetch_characters, guilds: scraper.fetch_guilds)
 scores = tracker.transform_score
-previous_scores = Services::PreviousScoresLookup.call(scores)
 tracker.commit(scores)
-movements = Services::PlayerMovementTracker.call(previous_scores, scores)
-growth = Services::PlayersGrowthTracker.call(scores)
-binding.pry
+# previous_scores = Services::PreviousScoresLookup.call(scores)
+# movements = Services::PlayerMovementTracker.call(previous_scores, scores)
+# growth = Services::PlayersGrowthTracker.call(scores)
