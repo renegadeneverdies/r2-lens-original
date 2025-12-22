@@ -18,7 +18,7 @@
 
 require "mongoid"
 
-Mongoid.load!("./config/mongoid.yml", :test)
+Mongoid.load!("#{__dir__}/../config/mongoid.yml", :test)
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate

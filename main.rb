@@ -6,7 +6,7 @@ require "require_all"
 require_all "src/services"
 require_all "src/fetching"
 
-Mongoid.load!("./config/mongoid.yml", :development)
+Mongoid.load!("#{__dir__}/config/mongoid.yml", :development)
 
 scraper = Fetching::Scraper.new
 tracker = Fetching::Tracker.new(characters: scraper.fetch_characters, guilds: scraper.fetch_guilds)
