@@ -61,11 +61,14 @@ jobs:
       uses: supercharge/mongodb-github-action@1.12.1
       with:
         mongodb-version: 7.0
-        mongodb-container-name: mongodb-test
-        mongodb-port: 27018
-        mongodb-username: r2_lens_test
-        mongodb-password: example
+        mongodb-container-name: mongodb-test-ci
         mongodb-db: r2_lens_test
 
     - name: RSpec
       run: bundle exec rspec --format progress
+      env:
+        CI: true
+    
+    - name: Cleanup
+      if: always()
+      run: docker stop mongodb-test-ci && docker rm mongodb-test-ci

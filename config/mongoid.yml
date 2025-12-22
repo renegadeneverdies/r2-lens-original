@@ -23,3 +23,12 @@ test:
         auth_source: r2_lens_test
   options:
     raise_not_found_error: false
+
+test_ci:
+  clients:
+    default:
+      database: r2_lens_test
+      hosts:
+        - mongodb-test-ci:27017
+  options:
+    raise_not_found_error: false

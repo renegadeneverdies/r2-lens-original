@@ -18,7 +18,8 @@
 
 require "mongoid"
 
-Mongoid.load!("#{__dir__}/../config/mongoid.yml", :test)
+environment = ENV["GITHUB_ACTIONS"] ? :test_ci : :test
+Mongoid.load!("#{__dir__}/../config/mongoid.yml", environment)
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
