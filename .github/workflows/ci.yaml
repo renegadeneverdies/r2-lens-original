@@ -62,6 +62,7 @@ jobs:
       with:
         mongodb-version: 7.0
         mongodb-container-name: mongodb-test-ci
+        mongodb-replica-set: rs0
         mongodb-db: r2_lens_test
 
     - name: RSpec
