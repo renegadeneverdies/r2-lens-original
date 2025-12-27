@@ -9,7 +9,7 @@ class Player
   field :name, type: String
   field :job, type: String
   field :guild, type: String
-  field :current_position, type: Integer
+  field :position, type: Integer
   field :exp_records, type: Array, default: []
 
   index({ name: 1 }, { unique: true, background: true })
@@ -26,10 +26,11 @@ class Player
           name: attrs["mName"],
           job: attrs["mClass"],
           guild: attrs["mGuildName"],
-          current_position: attrs["current_position"]
+          position: attrs["position"]
         }
       )
     end
+    player.update(position: attrs["position"]) if player.position != attrs["position"]
 
     player.add_exp_record(data)
   end

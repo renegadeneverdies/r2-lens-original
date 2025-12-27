@@ -8,6 +8,7 @@ gem "mongoid"
 gem "nokogiri", "~> 1.18", ">= 1.18.10"
 gem "require_all"
 gem "sqlite3"
+gem "telegram-bot-ruby", "~> 2.5"
 
 group :development, :test do
   gem "pry"

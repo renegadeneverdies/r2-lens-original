@@ -6,10 +6,9 @@ module Services
       last_record = player.exp_records.last(2).last
       first_record = player.exp_records.last(2).first
 
-      level = last_record["level"] - first_record["level"]
-      percent_now = level * 100 + last_record["percent"]
-      percent = (percent_now - first_record["percent"]).round(3)
-      { level:, percent: }
+      level_growth = last_record["level"] - first_record["level"]
+      percent_growth = (level_growth * 100 + last_record["percent"] - first_record["percent"]).round(3)
+      { level_growth:, percent_growth:, level: last_record["level"], percent: last_record["percent"] }
     end
   end
 end

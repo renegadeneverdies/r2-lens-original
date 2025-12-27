@@ -8,7 +8,7 @@ RSpec.describe Player do
                              name: "player1",
                              job: "knight",
                              guild: "void",
-                             current_position: 1,
+                             position: 1,
                              exp_records: [first_record, second_record]
                            })
   end

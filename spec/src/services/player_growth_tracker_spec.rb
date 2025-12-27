@@ -12,7 +12,7 @@ RSpec.describe Services::PlayerGrowthTracker do
                  name: "player1",
                  job: "knight",
                  guild: "void",
-                 current_position: 1,
+                 position: 1,
                  exp_records: [first_record, last_record]
                })
   end
@@ -30,7 +30,7 @@ RSpec.describe Services::PlayerGrowthTracker do
   end
 
   context "when level growth is zero" do
-    it { is_expected.to eq({ level: 0, percent: 10 }) }
+    it { is_expected.to eq({ level: 80, percent: 60, level_growth: 0, percent_growth: 10 }) }
   end
 
   context "when level growth is 1" do
@@ -42,7 +42,7 @@ RSpec.describe Services::PlayerGrowthTracker do
     end
 
     it "carries resulting percent over from the next level" do
-      expect(growth).to eq({ level: 1, percent: 60 })
+      expect(growth).to eq({ level: 81, percent: 10, level_growth: 1, percent_growth: 60 })
     end
   end
 end

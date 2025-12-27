@@ -6,7 +6,8 @@ module Services
       def call(scores)
         scores.each_with_object({}) do |(job, _), result|
           result[job] = {}
-          players = Player.where(job: job)
+          names = scores[job].map { _1["mName"] }
+          players = Player.where(:name.in => names).order_by(position: :asc)
           players.each { |player| result[job][player.name] = Services::PlayerGrowthTracker.call(player) }
         end
       end

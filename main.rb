@@ -5,6 +5,7 @@ require "require_all"
 
 require_all "src/services"
 require_all "src/fetching"
+require_all "src/presenters"
 
 Mongoid.load!("#{__dir__}/config/mongoid.yml", :development)
 
@@ -15,3 +16,4 @@ tracker.commit(scores)
 # previous_scores = Services::PreviousScoresLookup.call(scores)
 # movements = Services::PlayerMovementTracker.call(previous_scores, scores)
 # growth = Services::PlayersGrowthTracker.call(scores)
+# pres = Presenters::GrowthPresenter.present(growth)

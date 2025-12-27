@@ -44,7 +44,7 @@ module Fetching
     def commit(scores)
       scores.each_value do |job|
         job.each_with_index do |player_attrs, index|
-          Player.create_or_find_by_from_scraper(player_attrs.merge({ "current_position" => index + 1 }))
+          Player.create_or_find_by_from_scraper(player_attrs.merge({ "position" => index + 1 }))
         end
       end
     end

@@ -5,7 +5,7 @@ module Services
     class << self
       def call(ratings)
         ratings.each_with_object({}) do |(job, _), result|
-          result[job] = Player.where(job: job).order_by(current_position: :asc).map(&:serialize)
+          result[job] = Player.where(job: job).order_by(position: :asc).map(&:serialize)
           return ratings if result[job].blank?
         end
       end
