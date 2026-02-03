@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
+require "require_all"
+
 require_relative "scraper"
-require_relative "../models/player"
-require "sqlite3"
+require_all "src/models"
 
 module Fetching
   class Tracker
@@ -21,13 +22,12 @@ module Fetching
     LEVEL_COEF = 153
     SCORE_COEF = 50_000
 
-    @@db = SQLite3::Database.new("db/r2lens.sqlite")
-
     attr_accessor :characters
 
     def initialize(characters:, guilds:)
       @characters = characters.transform_keys { |key| JOB_MAPPING[key] }
       @guilds = guilds
+      @xp_requirements = Level.all
     end
 
     def transform_score
@@ -51,16 +51,8 @@ module Fetching
 
     private
 
-    def xp_requirements
-      exp_table = @@db.execute("SELECT ELevel, EExp FROM levels")
-
-      exp_table.each_with_object({}) do |pair, memo|
-        memo[pair.first] = pair.last
-      end
-    end
-
     def score_to_percent(score, level)
-      (score / (xp_requirements[level] / SCORE_COEF) * 100).round(3)
+      (score / (@xp_requirements.find_by(number: level).exp / SCORE_COEF) * 100).round(3)
     end
   end
 end

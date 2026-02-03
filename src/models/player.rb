@@ -44,7 +44,7 @@ class Player
 
     records = exp_records.filter { |r| r["date"] != record["date"] }
     records << record
-    update(exp_records: records.first(7))
+    update(exp_records: records.last(7))
   end
 
   def serialize
