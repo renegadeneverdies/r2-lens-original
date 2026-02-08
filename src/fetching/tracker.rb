@@ -27,7 +27,7 @@ module Fetching
     def initialize(characters:, guilds:)
       @characters = characters.transform_keys { |key| JOB_MAPPING[key] }
       @guilds = guilds
-      @xp_requirements = Level.all
+      @xp_requirements = Level.where(:number.gt => 70)
     end
 
     def transform_score
