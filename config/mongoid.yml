@@ -1,3 +1,16 @@
+production:
+  clients:
+    default:
+      database: r2_lens
+      hosts:
+        - mongodb:27017
+      options:
+        user: r2_lens_dev
+        password: example
+        auth_source: r2_lens
+  options:
+    raise_not_found_error: false
+
 development:
   clients:
     default:

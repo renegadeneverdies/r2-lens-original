@@ -1,5 +1,5 @@
 services:
-  app:
+  r2-lens:
     build: .  
     container_name: r2-lens
     depends_on:

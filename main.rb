@@ -4,7 +4,8 @@ require "require_all"
 
 require_all "src"
 
-Mongoid.load!("#{__dir__}/config/mongoid.yml", :development)
+environment = ENV["APP_ENV"]&.to_sym || :development
+Mongoid.load!("#{__dir__}/config/mongoid.yml", environment)
 
 scraper = Fetching::Scraper.new
 tracker = Fetching::Tracker.new(characters: scraper.fetch_characters, guilds: scraper.fetch_guilds)

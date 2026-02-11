@@ -1,0 +1,1 @@
+0 6 * * * docker exec r2-lens ruby main.rb >> /var/log/cron.log
