@@ -1,6 +1,6 @@
 services:
   r2-lens:
-    build: .  
+    build: .
     container_name: r2-lens
     depends_on:
       - mongodb
@@ -9,9 +9,8 @@ services:
       - "443:443"
     volumes:
       - ./db:/app/data/
-    environment:
-      - MONGODB_URI=mongodb://mongo:27017/r2_lens
-      - RACK_ENV=production
+    env_file:
+      - .env
     command: ["sleep", "infinity"]
   mongodb:
     image: mongo:latest
