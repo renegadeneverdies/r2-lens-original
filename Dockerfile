@@ -6,7 +6,6 @@ WORKDIR /app
 
 COPY Gemfile Gemfile.lock ./
 RUN bundle install --without development test
+RUN mkdir -p /app/data
 
 COPY . .
-
-RUN mkdir -p /app/data
