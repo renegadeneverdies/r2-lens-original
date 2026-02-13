@@ -7,6 +7,8 @@ services:
     ports:
       - "3000:3000"
       - "443:443"
+    networks:
+      - r2-lens-net
     volumes:
       - ./db:/app/data/
     env_file:
@@ -16,9 +18,15 @@ services:
     image: mongo:latest
     container_name: mongodb
     ports:
-      - "27017:27017"
+      - "127.0.0.1:27017:27017"
+    networks:
+      - r2-lens-net
     volumes:
       - mongodb-data:/data/db
 
 volumes:
   mongodb-data:
+
+networks:
+  r2-lens-net:
+    name: r2_lens_net
