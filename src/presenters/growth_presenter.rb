@@ -8,7 +8,7 @@ module Presenters
         @max_level_width = 3
         @max_score_width = 7
         @max_growth_width = 4
-        @buffer = @max_name_width + @max_level_width + @max_score_width + @max_growth_width + 20
+        @buffer = @max_name_width + @max_level_width + @max_score_width + @max_growth_width + 18
 
         growth.each_with_object([]) do |(job, players), result|
           job_rating = ["<pre>"]
