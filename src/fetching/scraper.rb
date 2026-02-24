@@ -3,13 +3,14 @@
 require "nokogiri"
 require "httparty"
 require "json"
+require "retriable"
 
 module Fetching
   class Scraper
     attr_accessor :resource
 
     def initialize(resource: "https://r-2.online/rating/char")
-      response = HTTParty.get(resource)
+      response = fetch_resource(resource)
       document = Nokogiri::HTML(response.body)
       @json_top_list = document.css("script").each do |element|
         contents = element.children.first.to_s
@@ -30,6 +31,21 @@ module Fetching
 
     def fetch_top_list
       @fetch_top_list ||= JSON.parse(@json_top_list[12..@json_top_list.size - 4])
+    end
+
+    def fetch_resource(resource)
+      Retriable.retriable(
+        on: [HTTParty::Error, SocketError, Timeout::Error],
+        tries: 3,
+        base_interval: 5,
+        multiplier: 2,
+        max_interval: 10,
+        on_retry: proc do |exception, try, _elapsed_time, next_interval|
+          puts("Retry ##{try} after #{next_interval}s due to: #{exception.class} - #{exception.message}")
+        end
+      ) do
+        HTTParty.get(resource)
+      end
     end
   end
 end

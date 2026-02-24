@@ -6,11 +6,12 @@ gem "httparty"
 gem "mongo"
 gem "mongoid"
 gem "nokogiri", "~> 1.18", ">= 1.18.10"
+gem "pry"
 gem "require_all"
+gem "retriable"
 gem "telegram-bot-ruby", "~> 2.5"
 
 group :development, :test do
-  gem "pry"
   gem "rubocop", require: false
   gem "rubocop-performance", require: false
   gem "rubocop-rspec", require: false
